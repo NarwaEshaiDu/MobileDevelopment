@@ -1,13 +1,6 @@
-import { StatusBar } from 'expo-status-bar';
-import React, { useEffect, useState } from 'react';
-import { StyleSheet, Text, View,Button,Image } from 'react-native';
-import { createStackNavigator, StackNavigationProp } from '@react-navigation/stack' 
-import { NavigationContainer, RouteProp, useNavigation, useRoute } from '@react-navigation/native';
-import { createDrawerNavigator } from '@react-navigation/drawer';
-import { FlatList, ScrollView, TouchableOpacity } from 'react-native-gesture-handler';
-import axios from 'axios';
-import { CatModel } from "./interfaces/cat-api.interface";
-import { CatViewProps } from "./interfaces/props.interfaces";
+import React, {  } from 'react';
+import { createStackNavigator } from '@react-navigation/stack' 
+import { NavigationContainer } from '@react-navigation/native';
 import DetailScreen from "./screens/details.screen";
 import HomeScreen from "./screens/home.screen";
 
