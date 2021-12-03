@@ -16,6 +16,7 @@ const DetailScreen = () =>{
       navigation.setOptions({title: "Details of " + name});
     },[]);
   
+    
     return route.params?.cat 
       ? (<View style={{flex: 1,backgroundColor: '#fff',justifyContent: 'center',alignItems: "center"}}>
           <Image
