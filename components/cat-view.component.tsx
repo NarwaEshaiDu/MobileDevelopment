@@ -2,7 +2,11 @@ import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import React from "react";
 import { TouchableOpacity, View, Image } from "react-native";
-import { CatViewProps } from "../interfaces/props.interfaces";
+import { CatModel } from "../interfaces/cat-api.interface";
+
+export interface CatViewProps {
+    cat: CatModel;
+  }
 
 const CatView = ({ cat }: CatViewProps) => {
     const navigation: StackNavigationProp<any> = useNavigation();
