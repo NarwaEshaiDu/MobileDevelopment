@@ -7,8 +7,6 @@ import AsyncStorage from "@react-native-community/async-storage";
 import CatView from "../components/cat-view.component";
 
 const FavouriteScreen = () => {
-  const navigation: StackNavigationProp<any> = useNavigation();
-  const route: RouteProp<any> = useRoute();
   const [ cats, setCats ] = useState<CatModel[]>([]);
 
   const loadFavorites = async () => {
@@ -21,7 +19,7 @@ const FavouriteScreen = () => {
   };
 
   const renderItem = ({item}: any) => {
-    return <CatView cat={item}></CatView>
+    return <CatView cat={item} reload={loadFavorites}></CatView>
   };
 
 
