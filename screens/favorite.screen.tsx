@@ -21,7 +21,7 @@ const FavouriteScreen = () => {
   };
 
   const renderItem = ({item}: any) => {
-    return <CatView cat={item}></CatView>
+    return <CatView cat={item} reload={loadFavorites}></CatView>
   };
 
 

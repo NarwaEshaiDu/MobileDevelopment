@@ -7,12 +7,12 @@ import AsyncStorage from "@react-native-community/async-storage";
 
 export interface CatViewProps {
   cat: CatModel;
+  reload?: () => void;
 }
 
-const CatView = ({ cat }: CatViewProps) => {
+const CatView = ({ cat, reload }: CatViewProps) => {
   const navigation: StackNavigationProp<any> = useNavigation();
-  const [favorites, setFavorites] = useState<CatModel[]>([]);
-  const [isFavourite, setIsFavourite] = useState<boolean>(true);
+  const [isFavourite, setIsFavourite] = useState<boolean>(false);
 
   const onPress = () => {
     navigation.navigate("Detail", { cat });
@@ -32,8 +32,9 @@ const CatView = ({ cat }: CatViewProps) => {
     }
 
     await AsyncStorage.setItem("@favourite", JSON.stringify(cats));
-
     await loadFavorites();
+
+    reload && reload();
   };
 
   const loadFavorites = async () => {
@@ -41,8 +42,7 @@ const CatView = ({ cat }: CatViewProps) => {
 
     if (item) {
       let cats = JSON.parse(item);
-      setFavorites(cats);
-      setIsFavourite(await isFavorite());
+      setIsFavourite(await isFavorite(cats));
     }
   };
 
@@ -50,8 +50,8 @@ const CatView = ({ cat }: CatViewProps) => {
     loadFavorites();
   }, []);
 
-  const isFavorite = async () => {
-    return favorites.map((x) => x.id).includes(cat.id);
+  const isFavorite = async (cats: CatModel[]) => {
+    return cats.map((x) => x.id).includes(cat.id);
   };
 
   return (
