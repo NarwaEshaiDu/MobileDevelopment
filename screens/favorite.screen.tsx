@@ -7,8 +7,6 @@ import AsyncStorage from "@react-native-community/async-storage";
 import CatView from "../components/cat-view.component";
 
 const FavouriteScreen = () => {
-  const navigation: StackNavigationProp<any> = useNavigation();
-  const route: RouteProp<any> = useRoute();
   const [ cats, setCats ] = useState<CatModel[]>([]);
 
   const loadFavorites = async () => {
