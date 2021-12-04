@@ -1,12 +1,33 @@
 import axios from "axios";
-import React, { useEffect, useState } from "react";
-import { FlatList, View, StyleSheet } from "react-native";
+import React, { useEffect, useState, useRef } from "react";
+import { FlatList, View, StyleSheet, Text, Button, Image } from "react-native";
 import CatView from "../components/cat-view.component";
 import { CatModel } from "../interfaces/cat-api.interface";
+import { Camera } from "expo-camera";
+
 
 const HomeScreen = () => {
-    const [ cats, setCats ] = useState<CatModel[]>([]);  
+    const [ cats, setCats ] = useState<CatModel[]>([]);
+
+    const [hasPermission, setHaspermission] = useState<boolean>();
+    const [image, setImage] = useState();
+    const camera = useRef();
     
+
+    if(hasPermission===null)
+    {
+      return <View/>
+    }
+    if(hasPermission===false)
+    {
+      return <Text>No access to the camera</Text>
+    }
+
+    const takePicture= async()=>{
+      let picture = await camera.current.takePictureAsync();
+      setImage(picture.uri);
+    }
+
     const loadCats = async()=>{
       try{
         const { data } = await axios.get<CatModel[]>('https://api.thecatapi.com/v1/images/search?limit=100',{
@@ -17,6 +38,9 @@ const HomeScreen = () => {
   
         const catsWithBreeds: CatModel[] = data.filter((cat: CatModel) => cat.breeds.length > 0);
         setCats(catsWithBreeds);
+        <Camera style={{ flex: 1 }} type={Camera.Constants.Type.back} ref={camera} />
+        {image && <Image source={{uri:image}} style={{width:200, height:200}}></Image> }
+        <Button title="Take Picture" onPress={takePicture }></Button>
       } catch{ } 
     };
   
@@ -26,18 +50,16 @@ const HomeScreen = () => {
     };
   
     const keyExtractor = (cat: CatModel)=> cat.url;
-  
+    
     useEffect(()=>{
-      loadCats();
+      (async() =>{
+        const permission = await Camera.requestCameraPermissionsAsync();
+        setHaspermission(permission.status==='granted');
+        loadCats();
+      })();
     },[]);
   
     return (
-      // <View style={{flex:1,backgroundColor:'#fff',justifyContent:'center',alignItems:"center"}}>
-      //   <Text>Home Screen</Text>
-      //   {/* hier komt dan onze lijst van katten? en wij willen de details van zien.
-      //   dit doen we door de ID mee te geven aan de detailscreen { itemId : 1} */}
-      //   <Button title="Item 2" onPress={()=> navigation.navigate('Detail',{itemId:2})}/>
-      // </View>
       <View style={styles.container}>
         <FlatList 
           data={cats}
