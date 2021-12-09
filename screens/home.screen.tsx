@@ -1,18 +1,19 @@
 import axios from "axios";
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState, useRef, useContext } from "react";
 import { FlatList, View, StyleSheet, Text, Button, Image } from "react-native";
 import CatView from "../components/cat-view.component";
 import { CatModel } from "../interfaces/cat-api.interface";
 import { Camera } from "expo-camera";
+import { PussyContext } from "../interfaces/context.interface";
 
 
 const HomeScreen = () => {
-    const [ cats, setCats ] = useState<CatModel[]>([]);
+    let { cats } = useContext(PussyContext);
 
     const [hasPermission, setHaspermission] = useState<boolean>();
     const [image, setImage] = useState();
     const camera = useRef();
-    
+   
 
     if(hasPermission===null)
     {
@@ -23,30 +24,13 @@ const HomeScreen = () => {
       return <Text>No access to the camera</Text>
     }
 
-    const takePicture= async()=>{
-      let picture = await camera.current.takePictureAsync();
-      setImage(picture.uri);
-    }
+    // const takePicture= async()=>{
+    //   let picture = await camera.current.takePictureAsync();
+    //   setImage(picture.uri);
+    // }
 
-    const loadCats = async()=>{
-      try{
-        const { data } = await axios.get<CatModel[]>('https://api.thecatapi.com/v1/images/search?limit=100',{
-          headers:{
-            ["x-api-key"]:"07b9d1ac-e5a5-41b8-a574-05803c333348"
-          }
-        });
-  
-        const catsWithBreeds: CatModel[] = data.filter((cat: CatModel) => cat.breeds.length > 0);
-        setCats(catsWithBreeds);
-        <Camera style={{ flex: 1 }} type={Camera.Constants.Type.back} ref={camera} />
-        {image && <Image source={{uri:image}} style={{width:200, height:200}}></Image> }
-        <Button title="Take Picture" onPress={takePicture }></Button>
-      } catch{ } 
-    };
-  
-  
     const renderItem = ({item}: any) => {
-      return <CatView cat={item}></CatView>
+      return <CatView cat={item} alwaysBlue={false}></CatView>
     };
   
     const keyExtractor = (cat: CatModel)=> cat.url;
@@ -55,13 +39,14 @@ const HomeScreen = () => {
       (async() =>{
         const permission = await Camera.requestCameraPermissionsAsync();
         setHaspermission(permission.status==='granted');
-        loadCats();
       })();
     },[]);
   
     return (
       <View style={styles.container}>
         <FlatList 
+          // refreshing={loading}
+          // onRefresh={() => {refresh()}}
           data={cats}
           renderItem={renderItem}
           keyExtractor={keyExtractor}

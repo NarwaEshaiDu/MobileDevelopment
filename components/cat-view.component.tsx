@@ -1,63 +1,36 @@
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { TouchableOpacity, View, Image } from "react-native";
 import { CatModel } from "../interfaces/cat-api.interface";
 import AsyncStorage from "@react-native-community/async-storage";
+import { PussyContext } from "../interfaces/context.interface";
 
 export interface CatViewProps {
   cat: CatModel;
-  reload?: () => void;
+  alwaysBlue: boolean;
 }
 
-const CatView = ({ cat, reload }: CatViewProps) => {
+const CatView = ({ cat, alwaysBlue }: CatViewProps) => {
   const navigation: StackNavigationProp<any> = useNavigation();
-  const [isFavourite, setIsFavourite] = useState<boolean>(false);
-
+  let { refresh } = useContext(PussyContext);
+  
   const onPress = () => {
     navigation.navigate("Detail", { cat });
   };
 
   const setAsFavorite = async () => {
-    let item = await AsyncStorage.getItem("@favourite");
-    let cats: CatModel[] = [];
-    if (item) {
-      cats = JSON.parse(item);
-    }
-    if(!(cats.map((x) => x.id).includes(cat.id))){
-      cats.push(cat);
-    }
-    else{
-      cats = cats.filter(x => x.id !== cat.id);
-    }
-
-    await AsyncStorage.setItem("@favourite", JSON.stringify(cats));
-    await loadFavorites();
-
-    reload && reload();
-  };
-
-  const loadFavorites = async () => {
-    let item = await AsyncStorage.getItem("@favourite");
-
-    if (item) {
-      let cats = JSON.parse(item);
-      setIsFavourite(await isFavorite(cats));
-    }
+    await refresh(cat)
   };
 
   useEffect(() => {
-    loadFavorites();
   }, []);
 
-  const isFavorite = async (cats: CatModel[]) => {
-    return cats.map((x) => x.id).includes(cat.id);
-  };
 
   return (
     <View
       style={{
-        backgroundColor: isFavourite ? "pink" : "blue",
+        backgroundColor: (!cat.isFavorite || alwaysBlue)  ? "blue" : "pink",
         padding: 20,
         margin: 4,
         borderWidth: 2,
@@ -66,7 +39,7 @@ const CatView = ({ cat, reload }: CatViewProps) => {
       <TouchableOpacity
         onPress={onPress}
         onLongPress={setAsFavorite}
-        delayLongPress={3000}
+        delayLongPress={1500}
       >
         <Image style={{ width: 100, height: 100 }} source={{ uri: cat.url }} />
       </TouchableOpacity>
