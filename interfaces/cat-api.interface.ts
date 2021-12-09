@@ -4,6 +4,7 @@ export interface CatModel {
   url: string;
   width: number;
   height: number;
+  isFavorite?: boolean;
 }
 
 export interface Image {
