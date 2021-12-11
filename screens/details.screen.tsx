@@ -9,8 +9,8 @@ const DetailScreen = () =>{
     const route : RouteProp<any> = useRoute();
   
     const { breeds, url } = route.params?.cat as CatModel;
-    const { name, description, energy_level, health_issues, intelligence, origin, temperament } 
-      = breeds ? breeds[0] : { name: "cat", description: "", energy_level: "", health_issues: "", intelligence: "", origin: "", temperament: "" };
+    const { name, description, energy_level,intelligence,temperament,health_issues } 
+      = breeds ? breeds[0] : { name: "cat", description: "", energy_level: "", intelligence:"" , temperament:"", health_issues:"" };
   
     useEffect(()=> {
       navigation.setOptions({title: "Details of " + name});
@@ -23,11 +23,11 @@ const DetailScreen = () =>{
             style={{ width: 100,height: 100 }}
             source={{ uri: url }}/>
             <Text>{ description }</Text>
-            <Text>{ energy_level }</Text>
-            <Text>{ health_issues }</Text>
-            <Text>{ origin }</Text>
-            <Text>{ temperament }</Text>
-            <Text>{ intelligence }</Text>
+           {energy_level === -1 || <Text>{ energy_level }</Text>}
+           {health_issues === -1 || <Text>{ health_issues }</Text>}
+           {origin === "" || <Text>{ origin }</Text>}
+           {temperament === "" || <Text>{ temperament }</Text>}
+           {intelligence === -1 || <Text>{ intelligence }</Text>}
         </View>) 
       : (<Text>No cat was found</Text>)
   }
