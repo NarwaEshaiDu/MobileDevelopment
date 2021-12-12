@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useEffect, useState } from "react";
+import React, { createContext, useContext, useEffect, useRef, useState } from "react";
 import {
   createStackNavigator,
   StackNavigationProp,
@@ -8,7 +8,7 @@ import DetailScreen from "./screens/details.screen";
 import HomeScreen from "./screens/home.screen";
 import { Camera } from "expo-camera";
 import FavouriteScreen from "./screens/favorite.screen";
-import { Button } from "react-native";
+import { Button, View, Text } from "react-native";
 import { PussyContext } from "./interfaces/context.interface";
 import { CatModel } from "./interfaces/cat-api.interface";
 import axios from "axios";
@@ -19,7 +19,6 @@ const Stack = createStackNavigator();
 export default () => {
   const [ catsState, setCatsState ] = useState<CatModel[]>([]);
   const [ favoriteState, setFavoriteState ] = useState<CatModel[]>([]);
-
   const loadCats = async()=>{
     try{
       const { data } = await axios.get<CatModel[]>('https://api.thecatapi.com/v1/images/search?limit=100',{
@@ -31,11 +30,10 @@ export default () => {
       let catsWithBreeds: CatModel[] = data.filter((cat: CatModel) => cat.breeds.length > 0);
 
       catsWithBreeds = catsWithBreeds.map(x => ({...x, isFavorite: false}));
-
+      
       setCatsState(catsWithBreeds);
-      // <Camera style={{ flex: 1 }} type={Camera.Constants.Type.back} ref={camera} />
-      // {image && <Image source={{uri:image}} style={{width:200, height:200}}></Image> }
-      // <Button title="Take Picture" onPress={takePicture }></Button>
+      
+     
     } catch{ } 
   };
 
