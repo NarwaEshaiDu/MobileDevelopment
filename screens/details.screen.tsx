@@ -95,4 +95,4 @@ const styles = StyleSheet.create({
   },
 });
 
-//TODO: Compentent maken van cat view
+//TODO: Compentent maken van text components (line 33)

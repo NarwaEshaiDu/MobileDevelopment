@@ -31,6 +31,7 @@ const CameraScreen = () => {
 
   const takePicture = async () => {
     console.log(camera);
+    const today = new Date(Date.now()).toLocaleDateString();
     let picture = await camera.takePictureAsync({ skipProcessing: true });
     const newCat: CatModel = {
       id: generateUUID(),
@@ -41,8 +42,8 @@ const CameraScreen = () => {
       breeds: [
         {
           id: generateUUID(),
-          description: "picture was taken at: " + Date.now(),
-          name: "Alpha Chad",
+          description: "Picture was taken at: " + today,
+          name: "ALPHA CHAD",
           intelligence: -1,
           temperament: "",
           energy_level: -1,
