@@ -22,22 +22,20 @@ export default () => {
         "https://api.thecatapi.com/v1/images/search?limit=100",
         {
           headers: {
-            ["x-api-key"]: "07b9d1ac-e5a5-41b8-a574-05803c333348",
-          },
+            ["x-api-key"]: "07b9d1ac-e5a5-41b8-a574-05803c333348"
+          }
         }
       );
 
-      let catsWithBreeds: CatModel[] = data.filter(
-        (cat: CatModel) => cat.breeds.length > 0
-      );
+      let catsWithBreeds: CatModel[] = data.filter((cat: CatModel) => cat.breeds.length > 0);
 
-      catsWithBreeds = catsWithBreeds.map((x) => ({ ...x, isFavorite: false }));
+      catsWithBreeds = catsWithBreeds.map(x => ({ ...x, isFavorite: false }));
 
       setCatsState(catsWithBreeds);
     } catch {}
   };
 
-  const refresh = async (cat: CatModel) => {
+  const refresh = async (cat: CatModel, update: boolean = false) => {
     let item = await AsyncStorage.getItem("@favourite");
     let localStorageCats: CatModel[] = [];
 
@@ -45,8 +43,8 @@ export default () => {
       localStorageCats = JSON.parse(item);
     }
 
-    localStorageCats = [...parseLocalCats(localStorageCats, cat)];
-    let catsTotalState = [...parseStateCats(catsState, cat)];
+    localStorageCats = [...parseLocalCats(localStorageCats, cat, update)];
+    let catsTotalState = [...parseStateCats(catsState, cat, update)];
 
     setCatsState(catsTotalState);
     setFavoriteState(localStorageCats);
@@ -54,21 +52,32 @@ export default () => {
     await AsyncStorage.setItem("@favourite", JSON.stringify(localStorageCats));
   };
 
-  const parseLocalCats = (cats: CatModel[], cat: CatModel) => {
-    if (!cats.map((x) => x.id).includes(cat.id)) {
+  const parseLocalCats = (cats: CatModel[], cat: CatModel, update: boolean) => {
+    if (!cats.map(x => x.id).includes(cat.id)) {
       cat.isFavorite = true;
       cats.push(cat);
     } else {
-      cat.isFavorite = false;
-      cats = cats.filter((x) => x.id !== cat.id);
+      if (!update) {
+        cat.isFavorite = false;
+        cats = cats.filter(x => x.id !== cat.id);
+      } else {
+        let arrayCat = cats.find(x => x.id === cat.id);
+        if (arrayCat) {
+          arrayCat.soundurl = cat.soundurl;
+        }
+      }
     }
     return cats;
   };
 
-  const parseStateCats = (cats: CatModel[], cat: CatModel) => {
-    let pussy = cats.find((x) => x.id === cat.id);
+  const parseStateCats = (cats: CatModel[], cat: CatModel, update: boolean) => {
+    let pussy = cats.find(x => x.id === cat.id);
     if (pussy) {
       pussy.isFavorite = cat.isFavorite;
+
+      if (update) {
+        pussy.soundurl = cat.soundurl;
+      }
     }
     return cats;
   };
@@ -94,23 +103,21 @@ export default () => {
       value={{
         cats: catsState,
         favorites: favoriteState,
-        refresh: async (cat: CatModel) => {
-          await refresh(cat);
+        refresh: async (cat: CatModel, update: boolean) => {
+          await refresh(cat, update);
         },
-        loading: false,
-      }}
-    >
+        loading: false
+      }}>
       <NavigationContainer>
         <Stack.Navigator
           screenOptions={{
             headerStyle: { backgroundColor: "#BC1D1D" },
             headerTitleStyle: {
               fontWeight: "bold",
-              textTransform: "uppercase",
+              textTransform: "uppercase"
             },
-            headerTintColor: "white",
-          }}
-        >
+            headerTintColor: "white"
+          }}>
           <Stack.Screen
             name="Home"
             component={HomeScreen}
@@ -118,11 +125,10 @@ export default () => {
               headerRight: () => (
                 <Pressable
                   style={styles.pressableStyle}
-                  onPress={() => navigation.navigate("Favourites")}
-                >
+                  onPress={() => navigation.navigate("Favourites")}>
                   <Text style={styles.textStyle}>Favorites</Text>
                 </Pressable>
-              ),
+              )
             })}
           />
           <Stack.Screen
@@ -132,11 +138,10 @@ export default () => {
               headerRight: () => (
                 <Pressable
                   style={styles.pressableStyle}
-                  onPress={() => navigation.navigate("Favourites")}
-                >
+                  onPress={() => navigation.navigate("Favourites")}>
                   <Text style={styles.textStyle}>Favorites</Text>
                 </Pressable>
-              ),
+              )
             })}
           />
           <Stack.Screen name="Camera" component={CameraScreen} />
@@ -150,14 +155,13 @@ export default () => {
 const styles = StyleSheet.create({
   pressableStyle: {
     backgroundColor: "#BC1D1D",
-    marginRight: 10,
+    marginRight: 10
   },
   textStyle: {
     textTransform: "uppercase",
     fontSize: 18,
     fontWeight: "700",
     color: "white",
-    fontFamily:
-      "-apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Helvetica, Arial, sans-serif",
-  },
+    fontFamily: "-apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Helvetica, Arial, sans-serif"
+  }
 });

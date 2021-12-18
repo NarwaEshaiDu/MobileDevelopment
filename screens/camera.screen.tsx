@@ -47,11 +47,11 @@ const CameraScreen = () => {
           intelligence: -1,
           temperament: "",
           energy_level: -1,
-          health_issues: -1,
-        },
-      ],
+          health_issues: -1
+        }
+      ]
     };
-    refresh(newCat);
+    refresh(newCat, false);
 
     navigation.navigate("home");
   };
@@ -76,14 +76,11 @@ const CameraScreen = () => {
       <Camera
         style={{ flex: 1 }}
         type={flipType}
-        ref={(r) => {
+        ref={r => {
           camera = r;
         }}
       />
-      <TouchableOpacity
-        style={[styles.button, { marginBottom: 5 }]}
-        onPress={flipCamera}
-      >
+      <TouchableOpacity style={[styles.button, { marginBottom: 5 }]} onPress={flipCamera}>
         <Text style={styles.opactityStyle}>Flip</Text>
       </TouchableOpacity>
       <TouchableOpacity style={styles.button} onPress={takePicture}>
@@ -95,7 +92,7 @@ const CameraScreen = () => {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    flex: 1
   },
   button: {
     display: "flex",
@@ -103,12 +100,12 @@ const styles = StyleSheet.create({
     textAlign: "center",
     backgroundColor: "orange",
     marginHorizontal: -20,
-    padding: 10,
+    padding: 10
   },
   opactityStyle: {
     color: "white",
-    fontSize: 19,
-  },
+    fontSize: 19
+  }
 });
 
 export default CameraScreen;

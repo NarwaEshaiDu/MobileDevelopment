@@ -19,7 +19,7 @@ const CatView = ({ cat, alwaysBlue }: CatViewProps) => {
   };
 
   const setAsFavorite = async () => {
-    await refresh(cat);
+    await refresh(cat, false);
   };
 
   useEffect(() => {}, []);

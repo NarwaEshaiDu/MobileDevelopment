@@ -5,12 +5,12 @@ export interface PussyInterface {
   cats: CatModel[];
   favorites: CatModel[];
   loading: boolean;
-  refresh: (cat: CatModel) => void;
+  refresh: (cat: CatModel, update: boolean) => void;
 }
 
 export const PussyContext = React.createContext<PussyInterface>({
   cats: [],
   favorites: [],
   loading: false,
-  refresh: () => {},
+  refresh: () => {}
 });
