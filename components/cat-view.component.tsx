@@ -48,8 +48,7 @@ const styles = StyleSheet.create({
     height: 100,
     borderRadius: 7,
     shadowOpacity: 3,
-    shadowRadius: 4,
-    backgroundSize: "cover"
+    shadowRadius: 4
   },
   viewStyle: {
     padding: 20,
