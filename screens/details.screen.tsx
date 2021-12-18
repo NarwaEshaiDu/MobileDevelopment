@@ -3,19 +3,14 @@ import { StackNavigationProp } from "@react-navigation/stack";
 import React, { useEffect } from "react";
 import { CatModel } from "../interfaces/cat-api.interface";
 import { Text, View, Image, StyleSheet } from "react-native";
+import LabelInfoComponent from "../components/label-info.component";
+import { LabelInfoInterface } from "../interfaces/label-info.interface";
 
 const DetailScreen = () => {
   const navigation: StackNavigationProp<any> = useNavigation();
   const route: RouteProp<any> = useRoute();
   const { breeds, url } = route.params?.cat as CatModel;
-  const {
-    name,
-    description,
-    energy_level,
-    intelligence,
-    temperament,
-    health_issues,
-  } = breeds
+  const { name, description, energy_level, intelligence, temperament, health_issues } = breeds
     ? breeds[0]
     : {
         name: "cat",
@@ -23,8 +18,15 @@ const DetailScreen = () => {
         energy_level: -1,
         intelligence: -1,
         temperament: "",
-        health_issues: -1,
+        health_issues: -1
       };
+
+  const labelInfoArray: LabelInfoInterface[] = [
+    { label: "Energy Level", value: energy_level + "/5", isVisible: energy_level === -1 },
+    { label: "Health Issues", value: health_issues + "/5", isVisible: health_issues === -1 },
+    { label: "Temperament", value: temperament, isVisible: temperament === "" },
+    { label: "Intelligence Level", value: intelligence + "/5", isVisible: intelligence === -1 }
+  ];
 
   useEffect(() => {
     navigation.setOptions({ title: name });
@@ -34,29 +36,16 @@ const DetailScreen = () => {
     <View style={styles.container}>
       <Image style={styles.imageStyle} source={{ uri: url }} />
       <Text style={styles.textStyle}>{description}</Text>
-      {energy_level === -1 || (
-        <Text style={styles.textStyle}>
-          <Text style={styles.boldTextStyle}>Energy Level:</Text> {energy_level}
-          /5
-        </Text>
-      )}
-      {health_issues === -1 || (
-        <Text style={styles.textStyle}>
-          <Text style={styles.boldTextStyle}>Health Issues:</Text>{" "}
-          {health_issues}/5
-        </Text>
-      )}
-      {temperament === "" || (
-        <Text style={styles.textStyle}>
-          <Text style={styles.boldTextStyle}>Temperament:</Text> {temperament}
-        </Text>
-      )}
-      {intelligence === -1 || (
-        <Text style={styles.textStyle}>
-          <Text style={styles.boldTextStyle}>Intelligence Level:</Text>{" "}
-          {intelligence}/5
-        </Text>
-      )}
+      {labelInfoArray.map((labelInfo: LabelInfoInterface) => (
+        <LabelInfoComponent
+          key={labelInfo.label}
+          label={labelInfo.label}
+          value={labelInfo.value}
+          styleText={styles.textStyle}
+          styleBold={styles.boldTextStyle}
+          isVisible={labelInfo.isVisible}
+        />
+      ))}
     </View>
   ) : (
     <Text>No cat was found</Text>
@@ -72,7 +61,7 @@ const styles = StyleSheet.create({
     padding: 20,
     justifyContent: "center",
     display: "flex",
-    textAlign: "left",
+    textAlign: "left"
   },
   imageStyle: {
     flex: 1,
@@ -82,17 +71,16 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
     borderRadius: 7,
     marginBottom: 10,
-    marginHorizontal: "auto",
+    marginHorizontal: "auto"
   },
   textStyle: {
-    fontFamily:
-      "-apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Helvetica, Arial, sans-serif",
+    fontFamily: "-apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Helvetica, Arial, sans-serif",
     fontSize: 14,
-    marginBottom: 5,
+    marginBottom: 5
   },
   boldTextStyle: {
-    fontWeight: "600",
-  },
+    fontWeight: "600"
+  }
 });
 
 //TODO: Compentent maken van text components (line 33)
