@@ -5,6 +5,7 @@ export interface CatModel {
   width: number;
   height: number;
   isFavorite?: boolean;
+  soundurl?: string;
 }
 
 export interface Image {

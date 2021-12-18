@@ -7,7 +7,7 @@ import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 
 const HomeScreen = () => {
-  let { cats, refresh } = useContext(PussyContext);
+  let { cats } = useContext(PussyContext);
   const navigation: StackNavigationProp<any> = useNavigation();
 
   const renderItem = ({ item }: any) => {
@@ -24,11 +24,7 @@ const HomeScreen = () => {
       <Pressable style={styles.button} onPress={goToCamera}>
         <Text style={styles.pressableStyle}>Take Picture</Text>
       </Pressable>
-      <FlatList
-        data={cats}
-        renderItem={renderItem}
-        keyExtractor={keyExtractor}
-      />
+      <FlatList data={cats} renderItem={renderItem} keyExtractor={keyExtractor} />
     </View>
   );
 };
@@ -42,7 +38,7 @@ const styles = StyleSheet.create({
     alignItems: "stretch",
     padding: 20,
     justifyContent: "center",
-    display: "flex",
+    display: "flex"
   },
   button: {
     display: "flex",
@@ -50,11 +46,11 @@ const styles = StyleSheet.create({
     textAlign: "center",
     backgroundColor: "orange",
     borderRadius: 100,
-    marginBottom: 20,
+    marginBottom: 20
   },
   pressableStyle: {
     color: "white",
     fontSize: 18,
-    fontWeight: "700",
-  },
+    fontWeight: "700"
+  }
 });
