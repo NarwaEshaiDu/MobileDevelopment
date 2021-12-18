@@ -53,7 +53,7 @@ const CameraScreen = () => {
     };
     refresh(newCat, false);
 
-    navigation.navigate("home");
+    navigation.navigate("Home");
   };
 
   const flipCamera = () => {

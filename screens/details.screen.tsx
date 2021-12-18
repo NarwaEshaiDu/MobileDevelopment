@@ -131,7 +131,7 @@ export default DetailScreen;
 
 const styles = StyleSheet.create({
   container: {
-    minHeight: "100%",
+    flex: 1,
     backgroundColor: "#E94242",
     padding: 20,
     justifyContent: "center",
@@ -149,12 +149,12 @@ const styles = StyleSheet.create({
     marginHorizontal: "auto"
   },
   textStyle: {
-    fontFamily: "-apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Helvetica, Arial, sans-serif",
+    // fontFamily: "Roboto",
     fontSize: 14,
     marginBottom: 5
   },
   boldTextStyle: {
-    fontWeight: "600"
+    fontWeight: "800"
   },
   pressableStyle: {
     display: "flex",

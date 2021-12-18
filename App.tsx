@@ -161,7 +161,7 @@ const styles = StyleSheet.create({
     textTransform: "uppercase",
     fontSize: 18,
     fontWeight: "700",
-    color: "white",
-    fontFamily: "-apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Helvetica, Arial, sans-serif"
+    color: "white"
+    // fontFamily: "Roboto"
   }
 });
