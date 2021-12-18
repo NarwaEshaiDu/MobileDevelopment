@@ -28,16 +28,11 @@ const CatView = ({ cat, alwaysBlue }: CatViewProps) => {
     <View
       style={[
         {
-          backgroundColor: !cat.isFavorite || alwaysBlue ? "blue" : "#BC1D1D",
+          backgroundColor: !cat.isFavorite || alwaysBlue ? "blue" : "#BC1D1D"
         },
-        styles.viewStyle,
-      ]}
-    >
-      <TouchableOpacity
-        onPress={onPress}
-        onLongPress={setAsFavorite}
-        delayLongPress={1500}
-      >
+        styles.viewStyle
+      ]}>
+      <TouchableOpacity onPress={onPress} onLongPress={setAsFavorite} delayLongPress={1500}>
         <Image style={styles.imageStyle} source={{ uri: cat.url }} />
       </TouchableOpacity>
       <Text style={styles.textStyle}>{cat.breeds[0]?.name}</Text>
@@ -54,6 +49,7 @@ const styles = StyleSheet.create({
     borderRadius: 7,
     shadowOpacity: 3,
     shadowRadius: 4,
+    backgroundSize: "cover"
   },
   viewStyle: {
     padding: 20,
@@ -63,12 +59,12 @@ const styles = StyleSheet.create({
     alignItems: "center",
     borderRadius: 7,
     shadowOpacity: 4,
-    shadowRadius: 6,
+    shadowRadius: 6
   },
   textStyle: {
     width: 100,
     color: "white",
     fontSize: 18,
-    fontWeight: "bold",
-  },
+    fontWeight: "bold"
+  }
 });
