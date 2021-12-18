@@ -2,7 +2,7 @@ import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import React, { useContext, useEffect, useRef, useState } from "react";
 import { CatModel } from "../interfaces/cat-api.interface";
-import { View, StyleSheet, Text, Pressable, TouchableOpacity } from "react-native";
+import { View, StyleSheet, Text, TouchableOpacity } from "react-native";
 import { Camera } from "expo-camera";
 import { PussyContext } from "../interfaces/context.interface";
 
@@ -31,6 +31,7 @@ const CameraScreen = () => {
 
   const takePicture = async () => {
     console.log(camera);
+    const today = new Date(Date.now()).toLocaleDateString();
     let picture = await camera.takePictureAsync({ skipProcessing: true });
     const newCat: CatModel = {
       id: generateUUID(),
@@ -41,18 +42,18 @@ const CameraScreen = () => {
       breeds: [
         {
           id: generateUUID(),
-          description: "picture was taken at: " + Date.now(),
-          name: "Alpha Chad",
+          description: "Picture was taken at: " + today,
+          name: "ALPHA CHAD",
           intelligence: -1,
           temperament: "",
           energy_level: -1,
-          health_issues: -1
-        }
-      ]
+          health_issues: -1,
+        },
+      ],
     };
     refresh(newCat);
 
-    navigation.navigate("Home");
+    navigation.navigate("home");
   };
 
   const flipCamera = () => {
@@ -75,14 +76,18 @@ const CameraScreen = () => {
       <Camera
         style={{ flex: 1 }}
         type={flipType}
-        ref={r => {
+        ref={(r) => {
           camera = r;
-        }}></Camera>
-      <TouchableOpacity style={[styles.button, { marginBottom: 5 }]} onPress={flipCamera}>
-        <Text style={{ color: "white", fontSize: 18 }}>Flip</Text>
+        }}
+      />
+      <TouchableOpacity
+        style={[styles.button, { marginBottom: 5 }]}
+        onPress={flipCamera}
+      >
+        <Text style={styles.opactityStyle}>Flip</Text>
       </TouchableOpacity>
       <TouchableOpacity style={styles.button} onPress={takePicture}>
-        <Text style={{ color: "white", fontSize: 18 }}>Take Picture</Text>
+        <Text style={styles.opactityStyle}>Take Picture</Text>
       </TouchableOpacity>
     </View>
   );
@@ -90,7 +95,7 @@ const CameraScreen = () => {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1
+    flex: 1,
   },
   button: {
     display: "flex",
@@ -98,8 +103,12 @@ const styles = StyleSheet.create({
     textAlign: "center",
     backgroundColor: "orange",
     marginHorizontal: -20,
-    padding: 10
-  }
+    padding: 10,
+  },
+  opactityStyle: {
+    color: "white",
+    fontSize: 19,
+  },
 });
 
 export default CameraScreen;

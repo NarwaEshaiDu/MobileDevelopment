@@ -12,5 +12,5 @@ export const PussyContext = React.createContext<PussyInterface>({
   cats: [],
   favorites: [],
   loading: false,
-  refresh: () => {}
+  refresh: () => {},
 });

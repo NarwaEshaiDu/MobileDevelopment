@@ -4,7 +4,7 @@ import { NavigationContainer } from "@react-navigation/native";
 import DetailScreen from "./screens/details.screen";
 import HomeScreen from "./screens/home.screen";
 import FavouriteScreen from "./screens/favorite.screen";
-import { Button } from "react-native";
+import { Pressable, StyleSheet, Text } from "react-native";
 import { PussyContext } from "./interfaces/context.interface";
 import { CatModel } from "./interfaces/cat-api.interface";
 import axios from "axios";
@@ -22,14 +22,16 @@ export default () => {
         "https://api.thecatapi.com/v1/images/search?limit=100",
         {
           headers: {
-            ["x-api-key"]: "07b9d1ac-e5a5-41b8-a574-05803c333348"
-          }
+            ["x-api-key"]: "07b9d1ac-e5a5-41b8-a574-05803c333348",
+          },
         }
       );
 
-      let catsWithBreeds: CatModel[] = data.filter((cat: CatModel) => cat.breeds.length > 0);
+      let catsWithBreeds: CatModel[] = data.filter(
+        (cat: CatModel) => cat.breeds.length > 0
+      );
 
-      catsWithBreeds = catsWithBreeds.map(x => ({ ...x, isFavorite: false }));
+      catsWithBreeds = catsWithBreeds.map((x) => ({ ...x, isFavorite: false }));
 
       setCatsState(catsWithBreeds);
     } catch {}
@@ -53,18 +55,18 @@ export default () => {
   };
 
   const parseLocalCats = (cats: CatModel[], cat: CatModel) => {
-    if (!cats.map(x => x.id).includes(cat.id)) {
+    if (!cats.map((x) => x.id).includes(cat.id)) {
       cat.isFavorite = true;
       cats.push(cat);
     } else {
       cat.isFavorite = false;
-      cats = cats.filter(x => x.id !== cat.id);
+      cats = cats.filter((x) => x.id !== cat.id);
     }
     return cats;
   };
 
   const parseStateCats = (cats: CatModel[], cat: CatModel) => {
-    let pussy = cats.find(x => x.id === cat.id);
+    let pussy = cats.find((x) => x.id === cat.id);
     if (pussy) {
       pussy.isFavorite = cat.isFavorite;
     }
@@ -95,22 +97,32 @@ export default () => {
         refresh: async (cat: CatModel) => {
           await refresh(cat);
         },
-        loading: false
-      }}>
+        loading: false,
+      }}
+    >
       <NavigationContainer>
         <Stack.Navigator
           screenOptions={{
-            headerStyle: { backgroundColor: "red" },
-            headerTitleStyle: { fontWeight: "bold" },
-            headerTintColor: "white"
-          }}>
+            headerStyle: { backgroundColor: "#BC1D1D" },
+            headerTitleStyle: {
+              fontWeight: "bold",
+              textTransform: "uppercase",
+            },
+            headerTintColor: "white",
+          }}
+        >
           <Stack.Screen
             name="Home"
             component={HomeScreen}
             options={({ navigation }) => ({
               headerRight: () => (
-                <Button title="Favourites" onPress={() => navigation.navigate("Favourites")} />
-              )
+                <Pressable
+                  style={styles.pressableStyle}
+                  onPress={() => navigation.navigate("Favourites")}
+                >
+                  <Text style={styles.textStyle}>Favorites</Text>
+                </Pressable>
+              ),
             })}
           />
           <Stack.Screen
@@ -118,8 +130,13 @@ export default () => {
             component={DetailScreen}
             options={({ navigation }) => ({
               headerRight: () => (
-                <Button title="Favourites" onPress={() => navigation.navigate("Favourites")} />
-              )
+                <Pressable
+                  style={styles.pressableStyle}
+                  onPress={() => navigation.navigate("Favourites")}
+                >
+                  <Text style={styles.textStyle}>Favorites</Text>
+                </Pressable>
+              ),
             })}
           />
           <Stack.Screen name="Camera" component={CameraScreen} />
@@ -129,3 +146,18 @@ export default () => {
     </PussyContext.Provider>
   );
 };
+
+const styles = StyleSheet.create({
+  pressableStyle: {
+    backgroundColor: "#BC1D1D",
+    marginRight: 10,
+  },
+  textStyle: {
+    textTransform: "uppercase",
+    fontSize: 18,
+    fontWeight: "700",
+    color: "white",
+    fontFamily:
+      "-apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Helvetica, Arial, sans-serif",
+  },
+});
